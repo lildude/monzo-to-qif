@@ -41,15 +41,15 @@ class QifCreator
           memo = ''
         end
 
-        memo << " #{transaction.settled.to_s.empty? ? nil : '👍'}"
         memo << " #{suggested_tags}" if suggested_tags
         memo.strip!
 
         qif << Qif::Transaction.new(
           date: transaction.created,
           amount: transaction.amount,
+          status: transaction.settled.to_s.empty? ? nil : 'C',
           memo: memo,
-          payee: (transaction.merchant ? transaction.merchant.name : nil) || (transaction.is_load ? 'Topup' : 'Unknown'),
+          payee: (transaction.merchant ? transaction.merchant.name : transaction.description) || (transaction.is_load ? 'Topup' : 'Unknown'),
           category: transaction.category
         )
 
