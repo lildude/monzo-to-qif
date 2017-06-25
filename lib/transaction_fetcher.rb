@@ -8,7 +8,8 @@ class TransactionFetcher
     @account_id = account_id
   end
 
-  def fetch(since: 2.weeks.ago)
+  def fetch(since: nil)
+    since ||= Time.now - 60*60*24*14 # Two weeks ago, without using Active Support
     account_id = http_get('/accounts')['accounts'].first['id']
     transactions = http_get("/transactions?account_id=#{account_id}&since=#{since.strftime('%FT%TZ')}&expand[]=merchant")
     transactions['transactions'].map{|t| OmniStruct.new(t)}
