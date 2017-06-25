@@ -11,10 +11,10 @@ class TransactionFetcher
     @account_id = @account['id']
   end
 
-  def fetch(since: (Time.now - (60*60*24*14)).to_date)
-    transactions = http_get("/transactions?account_id=#{@account_id}&since=#{since.strftime('%FT%TZ')}&expand[]=merchant")
-    # delete the fees children as they contain an unparsable key (withdrawal.atm.international)
-    transactions['transactions'].each {|x| x.delete_if {|y| y == "fees"}}
+  def fetch(since: nil)
+    since ||= Time.now - 60*60*24*14 # Two weeks ago, without using Active Support
+    account_id = http_get('/accounts')['accounts'].first['id']
+    transactions = http_get("/transactions?account_id=#{account_id}&since=#{since.strftime('%FT%TZ')}&expand[]=merchant")
     transactions['transactions'].map{|t| OmniStruct.new(t)}
   end
 
