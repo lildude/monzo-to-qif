@@ -37,15 +37,12 @@ class QifCreator
           next
         end
 
-        if transaction.merchant
-          suggested_tags = transaction.merchant.metadata.suggested_tags if transaction.merchant.metadata.suggested_tags
-          memo = transaction.merchant.emoji
+        if transaction.notes
+          memo = "#{transaction.notes} - #{transaction.description}"
         else
-          suggested_tags = nil
-          memo = ''
+          memo = transaction.description
         end
 
-        memo << " #{suggested_tags}" if suggested_tags
         memo.strip!
 
         qif << Qif::Transaction.new(
