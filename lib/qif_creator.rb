@@ -44,7 +44,7 @@ class QifCreator
         qif << Qif::Transaction.new(
           date: transaction.created,
           amount: transaction.amount,
-          status: transaction.settled.to_s.empty? ? nil : 'C',
+          status: transaction.settled.to_s.empty? ? nil : 'c',
           memo: memo,
           payee: (transaction.merchant ? transaction.merchant.name : transaction.description) || (transaction.is_load ? 'Topup' : 'Unknown'),
           category: transaction.category
