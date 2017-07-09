@@ -47,7 +47,7 @@ class QifCreator
           status: transaction.settled.to_s.empty? ? nil : 'c',
           memo: memo,
           payee: (transaction.merchant ? transaction.merchant.name : transaction.description) || (transaction.is_load ? 'Topup' : 'Unknown'),
-          category: transaction.category
+          category: transaction.category unless transaction.is_load
         )
 
         puts 'exported'.green
