@@ -5,6 +5,22 @@ class QifCreator
     @transactions = transactions
   end
 
+  def map_category(cat)
+    category_map = {
+      'eating_out' => 'Dining-Restaurants',
+      'groceries' => 'Groceries',
+      'entertainment' => 'Entertainment',
+      'shopping' => 'Clothing-Shoes',
+      'transport' => 'Travel',
+      'cash' => 'ATM-Cash Withdrawals'
+    }
+    if category_map.include?(cat)
+      category_map[cat]
+    else
+      nil
+    end
+  end
+
   def create(path = nil, settled_only: false)
     path ||= 'exports'
     path.chomp!('/')
@@ -43,11 +59,11 @@ class QifCreator
 
         qif << Qif::Transaction.new(
           date: transaction.created,
-          amount: transaction.amount,
+          amount: transaction.amount.to_f/100,
           status: transaction.settled.to_s.empty? ? nil : 'c',
           memo: memo,
           payee: (transaction.merchant ? transaction.merchant.name : transaction.description) || (transaction.is_load ? 'Topup' : 'Unknown'),
-          category: ( transaction.category unless transaction.is_load )
+          category: ( map_category(transaction.category) unless transaction.is_load )
         )
 
         puts 'exported'.green
