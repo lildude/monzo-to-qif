@@ -7,12 +7,12 @@ class QifCreator
 
   def map_category(cat)
     category_map = {
-      'eating_out' => 'Dining/Restaurants',
+      'eating_out' => 'Dining:Restaurants',
       'groceries' => 'Groceries',
       'entertainment' => 'Entertainment',
-      'shopping' => 'Clothing/Shoes',
+      'shopping' => 'Clothing',
       'transport' => 'Travel',
-      'cash' => 'ATM/Cash Withdrawals',
+      'cash' => 'ATM',
     }
     if category_map.include?(cat)
       category_map[cat]
