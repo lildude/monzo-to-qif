@@ -21,6 +21,16 @@ class QifCreator
     end
   end
 
+  def set_number(txn)
+    unless txn.merchant.nil?
+      return "Online" if txn.merchant.online
+      return "ATM" if txn.merchant.atm
+    end
+    return "Transfer" if txn.description.start_with?("pot_")
+    return "Deposit" if txn.amount > 0
+    return "POS"
+  end
+
   def create(path = nil, settled_only: false, account_number: nil)
     path ||= 'exports'
     path.chomp!('/')
@@ -65,6 +75,7 @@ class QifCreator
           date: transaction.created,
           amount: transaction.amount.to_f/100,
           status: transaction.settled.to_s.empty? ? nil : 'c',
+          number: set_number(transaction),
           memo: memo,
           payee: (transaction.merchant ? transaction.merchant.name : transaction.description) || (transaction.is_load ? 'Topup' : 'Unknown'),
           category: ( map_category(transaction.category) unless transaction.is_load )
