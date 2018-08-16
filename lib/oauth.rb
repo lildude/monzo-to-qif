@@ -41,7 +41,7 @@ class OAuth
 
     say "Open the following URL in a browser and follow the instructions."
     puts ''
-    say "https://auth.getmondo.co.uk/?client_id=#{clientId}&redirect_uri=#{@redirectURI}&response_type=code&state=#{@config['state']}"
+    say "https://auth.monzo.com/?client_id=#{clientId}&redirect_uri=#{@redirectURI}&response_type=code&state=#{@config['state']}"
     puts ''
     say "Once you receive the email, please copy the 'Login to Monzo' URL and run the following command"
     puts ''
